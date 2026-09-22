@@ -58,6 +58,17 @@ ng serve
 
 Then open `http://localhost:4200/`.
 
+### Accept the SAP backend's TLS certificate (one-time, per browser)
+
+The page will be **blank on first load** — that's expected. The commerce backend
+`https://40.76.109.9:9002` uses a **self-signed certificate** the browser rejects
+(`ERR_CERT_AUTHORITY_INVALID`), so Spartacus can't fetch base-site/product data until the
+certificate is trusted.
+
+1. In the **same browser**, open `https://40.76.109.9:9002/occ/v2/basesites`.
+2. Click through the warning (**Advanced → Proceed**) to trust it.
+3. Reload `http://localhost:4200/` — it now hydrates.
+
 ## Build
 
 ```bash
