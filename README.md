@@ -59,8 +59,7 @@ csdx cm:stacks:import \
 
 Then, in the Contentstack UI:
 
-1. **Publish** the imported entries **and assets** to the `development` environment.
-2. Create a **Delivery token** for `development`.
+1. Create a **Delivery token** for `development`.
 
 Keep your **stack API key** and the **delivery token** — you'll put them in `.env` next. (Full
 details are in the pack's [README](import-electronics-demo-content/README.md).)
@@ -81,6 +80,15 @@ npm start
 ```
 
 Open `http://localhost:4200/` — the storefront now renders the imported content.
+
+> **⚠️ Accept the backend's self-signed certificate first**
+> Commerce data comes from the SAP Commerce Cloud (OCC) backend configured in
+> [`src/app/spartacus/spartacus-configuration.module.ts`](src/app/spartacus/spartacus-configuration.module.ts),
+> which serves a **self-signed TLS certificate**. Browsers
+> block it by default, so the storefront loads as a **blank page** with a
+> `net::ERR_CERT_AUTHORITY_INVALID` error in the console. Fix it once per browser: open the backend
+> URL directly — e.g. `https://40.76.109.9:9002/occ/v2/electronics-spa/basesites` — click
+> **Advanced → Proceed anyway** to accept the certificate, then reload `http://localhost:4200/`.
 
 `npm start` (and `npm run build`) automatically generate
 `src/environments/contentstack.environment.ts` from your `.env` via
@@ -107,9 +115,3 @@ ng build
 ```
 
 Build artifacts are written to `dist/`.
-
-## Notes on credentials
-
-`CS_API_KEY`/`CS_DELIVERY_TOKEN` are **read-only, environment-scoped Contentstack Delivery API
-tokens** — safe to ship in the client bundle (they can only read already-published content, not
-write or delete).
