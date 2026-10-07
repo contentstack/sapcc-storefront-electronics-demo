@@ -32,6 +32,8 @@ if (!VALID_REGIONS.includes(region)) {
 
 const environment = process.env.CS_ENVIRONMENT || 'development';
 const livePreview = process.env.CS_LIVE_PREVIEW === 'true';
+const previewToken = process.env.CS_PREVIEW_TOKEN || '';
+const previewHost = process.env.CS_PREVIEW_HOST || '';
 
 const content = `import { Region } from '@contentstack/delivery-sdk';
 
@@ -42,7 +44,7 @@ export const contentstackDelivery = {
   deliveryToken: '${process.env.CS_DELIVERY_TOKEN}',
   environment: '${environment}',
   region: Region.${region},
-  livePreview: ${livePreview},
+  livePreview: ${livePreview},${previewToken ? `\n  previewToken: '${previewToken}',` : ''}${previewHost ? `\n  previewHost: '${previewHost}',` : ''}
 };
 `;
 
