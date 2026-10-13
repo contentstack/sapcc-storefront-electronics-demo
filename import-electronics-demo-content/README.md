@@ -35,10 +35,7 @@ csdx cm:stacks:import \
 One command imports the **17 content types**, **4 locales**, **509 entries**, **294 assets**,
 and creates the **`development`** environment.
 
-Then, in the Contentstack UI:
-1. **Publish** the entries **and assets** to the `development` environment.
-2. Create a **delivery token** for `development` — this is the only runtime credential the
-   storefront needs.
+Then, in the Contentstack UI, create a **delivery token** for `development` — this is the only runtime credential the storefront needs.
 
 ## Run the storefront against your stack
 
