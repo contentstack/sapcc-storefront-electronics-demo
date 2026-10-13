@@ -1,18 +1,16 @@
 # SAP Composable Storefront (Spartacus) + Contentstack — Electronics Demo
 
-A B2C electronics storefront built with **Angular 21** and **SAP Composable Storefront
-(Spartacus `221121.15.1`)**, using the
-[`@contentstack/contentstack-spartacus-connector`](https://github.com/contentstack/contentstack-spartacus-connector)
-to drive its CMS layer from **Contentstack**.
+A working SAP Composable Storefront (Spartacus) whose **entire content layer is managed in
+Contentstack**. Commerce data — products, pricing, cart, checkout — still comes from the SAP
+Commerce Cloud (OCC) backend, but everything an author touches — the homepage, navigation, footer,
+and marketing slots — is created and served from Contentstack through the
+[`@contentstack/contentstack-spartacus-connector`](https://github.com/contentstack/contentstack-spartacus-connector).
 
-Commerce data (products, pricing, cart, checkout) comes from a SAP Commerce Cloud (OCC) backend;
-page content — the homepage, navigation, footer, and marketing slots — comes from Contentstack,
-rendered as a hybrid over the OCC base (unauthored pages/slots fall back to OCC automatically).
+The point of the demo: you can run a complete SAP storefront's content from Contentstack. It renders
+as a hybrid over the OCC base, so any page or slot you haven't authored in Contentstack falls back to
+SAP automatically — you configure as much or as little of the site as you want.
 
-> **ℹ️ About the Contentstack stack**
-> This demo only renders content that already exists in a Contentstack stack. This repo ships that
-> content, so **Step 2 (Seed your Contentstack stack)** below gets you an electronics-demo
-> stack in one import command. Follow the steps top to bottom and the app runs.
+Built with **Angular 21** and **SAP Composable Storefront (Spartacus `221121.15.1`)**.
 
 ## Prerequisites
 
@@ -20,8 +18,8 @@ rendered as a hybrid over the OCC base (unauthored pages/slots fall back to OCC 
 | --- | --- |
 | Node.js | `^22.22.0` (older 22.x prints non-fatal `EBADENGINE` warnings) |
 | Angular CLI 21 | `npx -p @angular/cli@21 ng ...` — no global install required |
-| SAP RBSC registry access | Needed to install `@spartacus/*` packages — see below |
-| A Contentstack stack | Delivery token + API key (read-only) |
+| SAP RBSC registry access | Needed to install `@spartacus/*` packages — see Step 1 |
+| A Contentstack stack | An empty stack to import the demo content into |
 
 ## Step 1 — Install dependencies
 
@@ -40,12 +38,12 @@ This file is gitignored — it holds an organization credential and must never b
 npm install
 ```
 
-## Step 2 — Seed your Contentstack stack
+## Step 2 — Import the demo content into your stack
 
-The demo content (17 content types, 509 entries, 294 assets, 4 locales) ships in this repo as a
+The demo content (17 content types, 509 entries, 294 assets, 4 locales) ships with the repo as a
 Contentstack CLI export at
-[`import-electronics-demo-content/`](import-electronics-demo-content/). Import it into
-an **empty stack** whose master locale is **English - United States (`en-us`)**:
+[`import-electronics-demo-content/`](import-electronics-demo-content/). Import it into an **empty
+stack** whose master locale is **English - United States (`en-us`)**:
 
 ```bash
 npm install -g @contentstack/cli
@@ -57,21 +55,16 @@ csdx cm:stacks:import \
   --yes
 ```
 
-Then, in the Contentstack UI:
-
-1. Create a **Delivery token** for `development`.
-
-Keep your **stack API key** and the **delivery token** — you'll put them in `.env` next. (Full
-details are in the pack's [README](import-electronics-demo-content/README.md).)
-
-> Already have the configured demo stack? Skip the import and just use its API key + delivery
-> token in Step 3.
+The import also publishes the entries to the `development` environment. Then, in the Contentstack UI,
+create a **Delivery token** for `development`. Keep your **stack API key** and the **delivery token**
+— you'll put them in `.env` next. (Full details are in the pack's
+[README](import-electronics-demo-content/README.md).)
 
 ## Step 3 — Configure and run
 
 ```bash
 cp .env.example .env
-# fill in the stack API key + delivery token from Step 2:
+# fill in the values from Step 2:
 #   CS_API_KEY=<YOUR_STACK_API_KEY>
 #   CS_DELIVERY_TOKEN=<YOUR_DELIVERY_TOKEN>
 #   CS_ENVIRONMENT=development
@@ -79,16 +72,16 @@ cp .env.example .env
 npm start
 ```
 
-Open `http://localhost:4200/` — the storefront now renders the imported content.
+Open `http://localhost:4200/` — the storefront now renders content from your stack.
 
 > **⚠️ Accept the backend's self-signed certificate first**
 > Commerce data comes from the SAP Commerce Cloud (OCC) backend configured in
 > [`src/app/spartacus/spartacus-configuration.module.ts`](src/app/spartacus/spartacus-configuration.module.ts),
-> which serves a **self-signed TLS certificate**. Browsers
-> block it by default, so the storefront loads as a **blank page** with a
-> `net::ERR_CERT_AUTHORITY_INVALID` error in the console. Fix it once per browser: open the backend
-> URL directly — e.g. `https://40.76.109.9:9002/occ/v2/electronics-spa/basesites` — click
-> **Advanced → Proceed anyway** to accept the certificate, then reload `http://localhost:4200/`.
+> which serves a **self-signed TLS certificate**. Browsers block it by default, so the storefront
+> loads as a **blank page** with a `net::ERR_CERT_AUTHORITY_INVALID` error in the console. Fix it
+> once per browser: open the backend URL directly — e.g.
+> `https://40.76.109.9:9002/occ/v2/electronics-spa/basesites` — click **Advanced → Proceed anyway**
+> to accept the certificate, then reload `http://localhost:4200/`.
 
 `npm start` (and `npm run build`) automatically generate
 `src/environments/contentstack.environment.ts` from your `.env` via
@@ -96,9 +89,30 @@ Open `http://localhost:4200/` — the storefront now renders the imported conten
 credential-bearing ever needs to live in source control. See `.env.example` for all supported
 variables.
 
-On a hosting platform, set the same variables (`CS_API_KEY`, `CS_DELIVERY_TOKEN`, `CS_ENVIRONMENT`,
-`CS_REGION`, `CS_LIVE_PREVIEW`) as real environment variables instead of a `.env` file — the
-generator script reads `process.env` either way.
+On a hosting platform, set the same variables as real environment variables instead of a `.env`
+file — the generator script reads `process.env` either way.
+
+## Live Preview (optional)
+
+Contentstack [Live Preview](https://www.contentstack.com/docs/developers/set-up-live-preview) lets
+authors see edits render in the storefront in real time. To enable it, add these to your `.env`:
+
+```bash
+CS_LIVE_PREVIEW=true
+CS_PREVIEW_TOKEN=<YOUR_PREVIEW_TOKEN>        # Stack → Settings → Tokens → create a Preview token
+CS_PREVIEW_HOST=rest-preview.contentstack.com  # match your region (see table below)
+```
+
+| Region | `CS_PREVIEW_HOST` |
+| --- | --- |
+| US | `rest-preview.contentstack.com` |
+| EU | `eu-rest-preview.contentstack.com` |
+| AZURE-NA | `azure-na-rest-preview.contentstack.com` |
+| AZURE-EU | `azure-eu-rest-preview.contentstack.com` |
+
+Then restart (`npm start`) and, in the Contentstack UI, go to **Settings → Live Preview**, enable
+it, and set the preview URL to `http://localhost:4200`. Open any entry and use the **Live Preview**
+pane to see your edits render live.
 
 ## Development server
 
