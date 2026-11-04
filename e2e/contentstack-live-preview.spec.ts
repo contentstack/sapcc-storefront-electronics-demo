@@ -8,11 +8,11 @@ const CSLP_PATTERN = /^[^.]+\.[^.]+\.[a-z]{2}-[a-z]{2}(\..+)?$/;
 
 /**
  * Live Preview is force-disabled unless `delivery.livePreview`, a `previewToken`, AND dev
- * mode are all true (contentstack-client.service.ts) — and as of this writing the example
- * app's env generator (scripts/generate-contentstack-env.js) never writes a previewToken at
- * all, so it can't actually be turned on via `.env` yet. Set E2E_LIVE_PREVIEW_EXPECTED=true
- * once that's wired up (or when pointing this suite at an app build that has it) to assert
- * tags actually appear; otherwise this suite only asserts the (current, correct) off-state.
+ * mode are all true (contentstack-client.service.ts). The example app's env generator
+ * (scripts/generate-contentstack-env.js) wires this up from `.env`: set `CS_LIVE_PREVIEW=true`
+ * plus `CS_PREVIEW_TOKEN` (and `CS_PREVIEW_HOST`) to turn it on. Set E2E_LIVE_PREVIEW_EXPECTED=true
+ * when running against such a build to assert tags actually appear; otherwise this suite only
+ * asserts the (default) off-state.
  */
 const expectLivePreview = process.env.E2E_LIVE_PREVIEW_EXPECTED === 'true';
 
