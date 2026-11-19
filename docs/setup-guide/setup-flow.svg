@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 312" role="img" aria-label="The skill copies SAP content into your stack; the storefront reads both" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">
+  <title>The skill copies SAP content into your stack; the storefront reads both</title>
+  <defs>
+    <marker id="setup-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8c959f"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="312" fill="#ffffff"/>
+  <text x="24" y="34" font-size="15" font-weight="600" fill="#1f2328">The skill copies SAP content into your stack; the storefront reads both</text>
+
+  <g fill="none" stroke="#8c959f" stroke-width="1.25">
+    <path d="M240 100H272" marker-end="url(#setup-arrow)"/>
+    <path d="M488 100H520" marker-end="url(#setup-arrow)"/>
+    <path d="M132 136V252H272" marker-end="url(#setup-arrow)"/>
+    <path d="M628 136V252H488" marker-end="url(#setup-arrow)"/>
+  </g>
+
+  <!-- SAP Commerce Cloud -->
+  <rect x="24" y="64" width="216" height="72" rx="8" fill="none" stroke="#8c959f" stroke-width="1.25"/>
+  <text x="132" y="88" text-anchor="middle" font-weight="600" fill="#1f2328">SAP Commerce Cloud</text>
+  <text x="132" y="108" text-anchor="middle" font-size="11.5" fill="#59636e">Demo base site over OCC v2:</text>
+  <text x="132" y="124" text-anchor="middle" font-size="11.5" fill="#59636e">pages, products, prices</text>
+
+  <!-- Import agent skill (accent) -->
+  <rect x="272" y="64" width="216" height="72" rx="8" fill="#0969da" fill-opacity="0.12" stroke="#0969da" stroke-width="2"/>
+  <text x="380" y="88" text-anchor="middle" font-weight="600" fill="#1f2328">Import agent skill</text>
+  <text x="380" y="108" text-anchor="middle" font-size="11.5" fill="#1f2328">Extract, map, approve,</text>
+  <text x="380" y="124" text-anchor="middle" font-size="11.5" fill="#1f2328">seed, publish, verify</text>
+
+  <!-- Contentstack stack -->
+  <rect x="520" y="64" width="216" height="72" rx="8" fill="none" stroke="#8c959f" stroke-width="1.25"/>
+  <text x="628" y="88" text-anchor="middle" font-weight="600" fill="#1f2328">Your Contentstack stack</text>
+  <text x="628" y="108" text-anchor="middle" font-size="11.5" fill="#59636e">Content types, entries,</text>
+  <text x="628" y="124" text-anchor="middle" font-size="11.5" fill="#59636e">images, development env</text>
+
+  <!-- Demo storefront -->
+  <rect x="272" y="216" width="216" height="72" rx="8" fill="none" stroke="#8c959f" stroke-width="1.25"/>
+  <text x="380" y="240" text-anchor="middle" font-weight="600" fill="#1f2328">Demo storefront</text>
+  <text x="380" y="260" text-anchor="middle" font-size="11.5" fill="#59636e">npm start, .env with API key</text>
+  <text x="380" y="276" text-anchor="middle" font-size="11.5" fill="#59636e">and delivery token</text>
+
+  <!-- Edge labels -->
+  <text x="142" y="180" font-size="11.5" fill="#59636e">products, prices,</text>
+  <text x="142" y="196" font-size="11.5" fill="#59636e">cart, checkout</text>
+  <text x="618" y="180" text-anchor="end" font-size="11.5" fill="#59636e">pages, slots, navigation,</text>
+  <text x="618" y="196" text-anchor="end" font-size="11.5" fill="#59636e">read with the delivery token</text>
+</svg>
