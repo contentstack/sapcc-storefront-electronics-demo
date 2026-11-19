@@ -100,7 +100,7 @@ The skill imports the demo's content, publishes it to `development` and checks i
    - **Pre-publish.** The agent names the stack, the environment (`development`) and the counts, and warns that everything in the stack will be published. Confirm to continue.
 4. The agent imports the content types, uploads the images, creates the entries, creates the `development` environment, publishes, and checks the result against SAP. With languages requested, it repeats the import per locale (`de-de`, `ja-jp`, `zh-cn`) and publishes each one.
 
-The import is safe to re-run: it updates entries in place, keyed by their SAP ids, and never creates duplicates. The last check reads the home page through the Delivery API; on a first run it shows `check` instead of `pass`, because the delivery token doesn't exist until Step 4.
+The dry run takes about 2 minutes. The full import with three languages takes about 45 minutes, so let your agent run it in the background. The import is safe to re-run: it updates entries in place, keyed by their SAP ids, and never creates duplicates. The last check reads the home page through the Delivery API; on a first run it shows `check` instead of `pass`, because the delivery token doesn't exist until Step 4.
 
 To run the skill's scripts yourself instead (`<SKILL_DIR>` is the installed skill folder):
 
