@@ -199,6 +199,8 @@ Find your symptom in the first column. For connector issues not listed here, see
 
 ## Additional Resources
 
+- [Electronics demo (B2C), live on Launch](https://sapcc-storefront-electronics-demo.contentstackapps.com/)
+- [Powertools demo (B2B), live on Launch](https://sapcc-storefront-powertools-demo.contentstackapps.com/)
 - [Install the SAP Spartacus Connector](https://www.contentstack.com/docs/marketplace/spartacus-contentstack-connector)
 - [SAP Spartacus Connector Architecture](https://www.contentstack.com/docs/marketplace/spartacus-contentstack-connector-architecture)
 - [SAP Spartacus content import skill](https://github.com/contentstack/contentstack-agent-skills/blob/main/docs/skills/dx-sap-spartacus-import.md)
