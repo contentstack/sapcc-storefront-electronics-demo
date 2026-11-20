@@ -13,7 +13,7 @@ You don't build the demo content by hand. The skill reads the content the SAP si
 - Install a demo storefront.
 - Seed an empty stack from the demo's SAP site with the agent skill.
 - Add the German, Japanese and Chinese languages.
-- Optionally, let editors pick carousel products from SAP with the SAP Commerce Cloud app.
+- Let editors pick carousel products from SAP with the SAP Commerce Cloud app, which the import sets up.
 - Connect the storefront to your stack, run it, and check that content comes from Contentstack.
 
 ## The Two Demos
@@ -28,7 +28,7 @@ Both demos use the same app code, connector and setup steps; only the SAP base s
 | Pages imported | `/`, `/faq`, `/contact`, `/sale`, product layout, category layout | Same |
 | Content imported | 111 component entries, 37 images | 83 component entries, 41 images |
 | Languages | en, de, ja, zh | en, de, ja, zh |
-| SAP product picker on carousels | Optional | Optional |
+| SAP product picker on carousels | Set up by the import | Set up by the import |
 
 ## Prerequisites
 
@@ -86,12 +86,17 @@ The skill reads the demo's SAP site once and writes its content into your stack.
 
 The skill imports the demo's content, publishes it to `development` and checks it against SAP; it asks before it writes anything. Run these from the demo's project root, in the terminal where your agent runs.
 
-1. Export the settings in your own shell. Don't paste tokens into the chat. Outside North America, also export `CS_REGION_BASE` and `CS_CDA_BASE`, for example `https://eu-api.contentstack.com` and `https://eu-cdn.contentstack.com`.
+1. Export the settings in your own shell, including the SAP product picker's three `SAP_APP_*` settings: base site `electronics` for the electronics demo, `powertools-spa` for powertools, on an SAP server that carries the same catalog as the demo's own. Don't paste tokens into the chat. Outside North America, also export `CS_REGION_BASE` and `CS_CDA_BASE`, for example `https://eu-api.contentstack.com` and `https://eu-cdn.contentstack.com`.
 
    ```bash
    export CS_API_KEY=<your stack API key>
    export OCC_BASE_URL=https://<sap-host>/occ/v2   # the server in proxy.conf.json
    export OCC_INSECURE_TLS=1                      # only for a self-signed dev server you trust
+
+   # SAP product picker on the carousels
+   export SAP_APP_API_BASE_URL=<sap-api-host>       # host only, no https://
+   export SAP_APP_BASE_SITE=<base site>            # electronics or powertools-spa
+   export SAP_APP_BACKOFFICE_URL=<backoffice-host>/backoffice
    ```
 
 2. Ask your agent, for example: *Import the `electronics-spa` SAP storefront into my Contentstack stack, with German, Japanese and Chinese.* The agent loads the `dx-sap-spartacus-import` skill and starts with a **dry run**, which writes nothing. It reports the pages, component entries and images it will create, the slots that stay with SAP (search box, mini cart, site context, site links), and any SAP component types it doesn't recognize.
@@ -113,21 +118,15 @@ python3 "<SKILL_DIR>/scripts/orchestrate.py" --site <base-site> \
   --locales de=de-de,ja=ja-jp,zh=zh-cn
 ```
 
-## Step 3 (Optional): Let Editors Pick Carousel Products From SAP
+## Step 3: Check the SAP Product Picker
 
-The import can install the **SAP Commerce Cloud** marketplace app on the stack and fill a `sap_products` field, so editors pick carousel products visually from SAP instead of typing product codes into the plain `products` list.
+The import installs the **SAP Commerce Cloud** marketplace app on the stack and fills the `sap_products` field, so editors pick carousel products visually from SAP instead of typing product codes into the plain `products` list.
 
 The connector reads `sap_products` first and falls back to `products`, so the storefront carousels show exactly the products editors pick.
 
-Before running Step 2, also export the SAP server the picker searches. Use base site `electronics` for the electronics demo and `powertools-spa` for powertools; the server must carry the same catalog as the demo's own SAP server:
+If the picker can't be set up, the import keeps the plain `products` list for the carousels and says why: the `SAP_APP_*` settings aren't exported, the installed connector reads only `products`, or the SAP server fails the check below. Fix that and re-run; the carousels switch to the picker.
 
-```bash
-export SAP_APP_API_BASE_URL=<sap-api-host>                 # host only, no https://
-export SAP_APP_BASE_SITE=<picker base site>                 # electronics or powertools-spa
-export SAP_APP_BACKOFFICE_URL=<backoffice-host>/backoffice
-```
-
-With all three set, the dry run first checks that SAP server: its certificate is publicly trusted, the base site exists, product search returns products without a login, and the carousels' product codes are on it. If a check fails, the run stops before anything is installed and names the fix. Otherwise the import installs and configures the app once, adds the picker to the carousel content type and fills it. Then open a carousel entry (for example **Our Bestselling Products**) and check that the **SAP Products** field lists products; the first load after the install can take about a minute.
+The dry run first checks the SAP server the picker searches: its certificate is publicly trusted, the base site exists, product search returns products without a login, and the carousels' product codes are on it. If a check fails, nothing is installed and the run names the fix. Otherwise the import installs and configures the app once, adds the picker to the carousel content type and fills it. Then open a carousel entry (for example **Our Bestselling Products**) and check that the **SAP Products** field lists products; the first load after the install can take about a minute.
 
 ## Step 4: Connect the Storefront to Your Stack
 
@@ -185,7 +184,7 @@ Find your symptom in the first column. For connector issues not listed here, see
 | The import says the starter pack wasn't found | It ran outside the project root, or before `npm install` | Run it from the demo's root after `npm install`; it reads `node_modules/@contentstack/contentstack-spartacus-connector/import-export/starter-pack` |
 | The import stops at model approval (exit code 2) | The SAP site uses a component type the skill doesn't know | Tell the agent whether each one is authored content or functional, then re-run the dry run |
 | The import stops at pre-publish with a starter-pack mismatch (exit code 3) | The installed connector is older than the import expects | `npm i @contentstack/contentstack-spartacus-connector@latest`, then re-run. Don't edit the stack's content types by hand |
-| The import stops at pre-publish with exit code 4 (SAP picker preflight) | The SAP server the picker searches can't serve it: an untrusted certificate, a missing base site, an empty search index, search behind a login, or a catalog without the carousel codes | Fix what the `FAIL` line names (for example run a full `powertoolsIndex` for an empty search), or run without the picker (`--carousel-field products`) |
+| The import says the SAP picker preflight failed and keeps the plain product list | The SAP server the picker searches can't serve it: an untrusted certificate, a missing base site, an empty search index, search behind a login, or a catalog without the carousel codes | Fix what the `FAIL` line names (for example run a full `powertoolsIndex` for an empty search), then re-run; the carousels switch to the picker |
 | `csdx not found` or `not logged in` | No CLI session | Install `@contentstack/cli` and run `csdx auth:login --oauth`, or export `CS_MANAGEMENT_TOKEN`; the SAP app step still needs OAuth |
 | The delivery check shows `check` instead of `pass` | No delivery token on the first run, or the read timed out right after a large publish | After Step 4, or a minute later, ask the agent to re-run the delivery check |
 | `npm start` stops with `Missing required env var(s)` | `.env` is missing or incomplete | Create it from `.env.example` with `CS_API_KEY` and `CS_DELIVERY_TOKEN` (Step 4) |
